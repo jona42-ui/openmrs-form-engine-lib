@@ -174,6 +174,7 @@ export type RenderType =
   | 'select'
   | 'text'
   | 'date'
+  | 'time'
   | 'number'
   | 'checkbox'
   | 'datetime'

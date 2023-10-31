@@ -91,11 +91,11 @@ export async function getRegisteredControl(renderType: string) {
   if (registryCache.controls[renderType]) {
     return registryCache.controls[renderType];
   }
-  let component = inbuiltControls.find(item => item.type === renderType || item?.alias === renderType)?.component;
+  let component = inbuiltControls.find((item) => item.type === renderType || item?.alias === renderType)?.component;
   // if undefined, try serching through the registered custom controls
   if (!component) {
     const importedControl = await getFormsStore()
-      .controls.find(item => item.type === renderType || item?.alias === renderType)
+      .controls.find((item) => item.type === renderType || item?.alias === renderType)
       ?.load?.();
     component = importedControl?.default;
   }
@@ -110,11 +110,11 @@ export async function getRegisteredFieldSubmissionHandler(type: string): Promise
   if (registryCache.fieldSubmissionHandlers[type]) {
     return registryCache.fieldSubmissionHandlers[type];
   }
-  let handler = inbuiltFieldSubmissionHandlers.find(handler => handler.type === type)?.component;
+  let handler = inbuiltFieldSubmissionHandlers.find((handler) => handler.type === type)?.component;
   // if undefined, try serching through the registered custom handlers
   if (!handler) {
     const handlerImport = await getFormsStore()
-      .fieldSubmissionHandlers.find(handler => handler.type === type)
+      .fieldSubmissionHandlers.find((handler) => handler.type === type)
       ?.load?.();
     handler = handlerImport?.default;
   }
@@ -126,7 +126,7 @@ export async function getRegisteredPostSubmissionAction(actionId: string) {
   if (registryCache.postSubmissionActions[actionId]) {
     return registryCache.postSubmissionActions[actionId];
   }
-  const lazy = getFormsStore().postSubmissionActions.find(registration => registration.name === actionId)?.load;
+  const lazy = getFormsStore().postSubmissionActions.find((registration) => registration.name === actionId)?.load;
   if (lazy) {
     const actionImport = await lazy();
     registryCache.postSubmissionActions[actionId] = actionImport.default;
@@ -141,10 +141,10 @@ export async function getRegisteredValidator(name: string): Promise<FieldValidat
   if (registryCache.validators[name]) {
     return registryCache.validators[name];
   }
-  let validator = inbuiltValidators.find(validator => validator.name === name)?.component;
+  let validator = inbuiltValidators.find((validator) => validator.name === name)?.component;
   if (!validator) {
     const validatorImport = await getFormsStore()
-      .fieldValidators.find(validator => validator.name === name)
+      .fieldValidators.find((validator) => validator.name === name)
       ?.load?.();
     validator = validatorImport?.default;
   }
@@ -156,14 +156,14 @@ export async function getRegisteredDataSource(name: string): Promise<DataSource<
   if (registryCache.dataSources[name]) {
     return registryCache.dataSources[name];
   }
-  let ds = inbuiltDataSources.find(dataSource => dataSource.name === name)?.component;
+  let ds = inbuiltDataSources.find((dataSource) => dataSource.name === name)?.component;
   if (!ds) {
     const template = getControlTemplate(name);
     if (template) {
-      ds = inbuiltDataSources.find(dataSource => dataSource.name === template.datasource.name)?.component;
+      ds = inbuiltDataSources.find((dataSource) => dataSource.name === template.datasource.name)?.component;
     } else {
       const dataSourceImport = await getFormsStore()
-        .dataSources.find(ds => ds.name === name)
+        .dataSources.find((ds) => ds.name === name)
         ?.load?.();
       if (!dataSourceImport) {
         throw new Error('Datasource not found');

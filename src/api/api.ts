@@ -18,7 +18,7 @@ export function saveEncounter(abortController: AbortController, payload, encount
 }
 
 export function getConcept(conceptUuid: string, v: string): Observable<any> {
-  return openmrsObservableFetch(`/ws/rest/v1/concept/${conceptUuid}?v=${v}`).pipe(map(response => response['data']));
+  return openmrsObservableFetch(`/ws/rest/v1/concept/${conceptUuid}?v=${v}`).pipe(map((response) => response['data']));
 }
 
 export function getLocationsByTag(tag: string): Observable<{ uuid: string; display: string }[]> {
@@ -32,7 +32,7 @@ export async function getPreviousEncounter(patientUuid: string, encounterType: s
   let response = await openmrsFetch(`/ws/fhir2/R4/Encounter?${query}`);
   if (response.data.entry.length) {
     const latestEncounter = response.data.entry[0].resource.id;
-    response = await openmrsFetch(`/ws/rest/v1/encounter/${latestEncounter}?v=${encounterRepresentation}`)
+    response = await openmrsFetch(`/ws/rest/v1/encounter/${latestEncounter}?v=${encounterRepresentation}`);
     return response.data;
   }
   return null;

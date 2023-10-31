@@ -111,9 +111,14 @@ export const inbuiltControls: Array<RegistryItem<React.ComponentType<OHRIFormFie
     component: UISelectExtended,
     type: 'ui-select-extended',
   },
-  ...controlTemplates.map(template => ({
+  {
+    name: 'OHRITime',
+    component: OHRIDate,
+    type: 'time',
+  },
+  ...controlTemplates.map((template) => ({
     name: `${template.name}Control`,
-    component: templateToComponentMap.find(component => component.name === template.name).baseControlComponent,
+    component: templateToComponentMap.find((component) => component.name === template.name).baseControlComponent,
     type: template.name.toLowerCase(),
   })),
 ];

@@ -65,7 +65,7 @@ const OHRIDate: React.FC<OHRIFormFieldProps> = ({ question, onChange, handler })
   const { placeholder, carbonDateformat } = useMemo(() => {
     const formatObj = dateFormatter.formatToParts(new Date());
     const placeholder = formatObj
-      .map(obj => {
+      .map((obj) => {
         switch (obj.type) {
           case 'day':
             return 'dd';
@@ -79,7 +79,7 @@ const OHRIDate: React.FC<OHRIFormFieldProps> = ({ question, onChange, handler })
       })
       .join('');
     const carbonDateformat = formatObj
-      .map(obj => {
+      .map((obj) => {
         switch (obj.type) {
           case 'day':
             return 'd';
@@ -117,7 +117,7 @@ const OHRIDate: React.FC<OHRIFormFieldProps> = ({ question, onChange, handler })
   }, [encounterContext?.previousEncounter]);
 
   useEffect(() => {
-    getConceptNameAndUUID(question.questionOptions.concept).then(conceptTooltip => {
+    getConceptNameAndUUID(question.questionOptions.concept).then((conceptTooltip) => {
       setConceptName(conceptTooltip);
     });
   }, [conceptName]);
@@ -164,7 +164,7 @@ const OHRIDate: React.FC<OHRIFormFieldProps> = ({ question, onChange, handler })
                 // Something strange is happening with the way events are propagated and handled by Carbon.
                 // When we manually trigger an onchange event using the 'fireEvent' lib, the handler below will
                 // be triggered as opposed to the former handler that only gets triggered at runtime.
-                onChange={e => onDateChange([dayjs(e.target.value, 'DD/MM/YYYY').toDate()])}
+                onChange={(e) => onDateChange([dayjs(e.target.value, 'DD/MM/YYYY').toDate()])}
                 disabled={question.disabled}
                 invalid={!isFieldRequiredError && errors.length > 0}
                 invalidText={errors[0]?.message}
@@ -174,24 +174,28 @@ const OHRIDate: React.FC<OHRIFormFieldProps> = ({ question, onChange, handler })
               />
             </DatePicker>
           </div>
-          {question?.questionOptions.rendering === 'datetime' ? (
+          {question.questionOptions.rendering === 'datetime' || question.questionOptions.rendering === 'time' ? (
             <TimePicker
-              // This classname doesn't seem to exist
               className={styles.timePicker}
               id={question.id}
               labelText="Time:"
               placeholder="HH:MM"
-              pattern="(1[012]|[1-9]):[0-5][0-9])$"
-              type="time"
-              disabled={!field.value ? true : false}
+              pattern="([01][0-9]|2[0-3]):[0-5][0-9]"
+              type="text"
+              disabled={!field.value ? false : false}
               value={
                 time
                   ? time
                   : field.value instanceof Date
-                  ? field.value.toLocaleDateString(window.navigator.language)
+                  ? field.value.toLocaleTimeString(window.navigator.language, {
+                      hour: '2-digit',
+                      minute: '2-digit',
+                    })
                   : field.value
               }
-              onChange={onTimeChange}
+              onChange={(e) => {
+                onTimeChange(e, false);
+              }}
             />
           ) : (
             ''

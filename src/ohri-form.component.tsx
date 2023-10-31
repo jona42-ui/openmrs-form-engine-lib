@@ -92,12 +92,11 @@ const OHRIForm: React.FC<OHRIFormProps> = ({
   const currentProvider = session?.currentProvider?.uuid ? session.currentProvider.uuid : null;
   const location = session && !(encounterUUID || encounterUuid) ? session?.sessionLocation : null;
   const { patient, isLoadingPatient: isLoadingPatient, patientError: patientError } = usePatientData(patientUUID);
-  const { formJson: refinedFormJson, isLoading: isLoadingFormJson, formError } = useFormJson(
-    formUUID,
-    formJson,
-    encounterUUID || encounterUuid,
-    formSessionIntent,
-  );
+  const {
+    formJson: refinedFormJson,
+    isLoading: isLoadingFormJson,
+    formError,
+  } = useFormJson(formUUID, formJson, encounterUUID || encounterUuid, formSessionIntent);
 
   const { t } = useTranslation();
   const formSessionDate = useMemo(() => new Date(), []);
@@ -168,7 +167,7 @@ const OHRIForm: React.FC<OHRIFormProps> = ({
   const handleFormSubmit = (values: Record<string, any>) => {
     // validate the form and its subforms (when present)
     let isSubmittable = true;
-    handlers.forEach(handler => {
+    handlers.forEach((handler) => {
       const result = handler?.validate?.(values);
       if (!result) {
         isSubmittable = false;
@@ -182,7 +181,7 @@ const OHRIForm: React.FC<OHRIFormProps> = ({
       });
 
       Promise.all(submissions)
-        .then(async results => {
+        .then(async (results) => {
           if (mode === 'edit') {
             showToast({
               description: t('updatedRecordDescription', 'The patient encounter was updated'),
@@ -206,7 +205,7 @@ const OHRIForm: React.FC<OHRIFormProps> = ({
                   {
                     patient,
                     sessionMode,
-                    encounters: results.map(encounterResult => encounterResult.data),
+                    encounters: results.map((encounterResult) => encounterResult.data),
                   },
                   config,
                 );
@@ -215,7 +214,7 @@ const OHRIForm: React.FC<OHRIFormProps> = ({
           }
           onSubmit?.();
         })
-        .catch(error => {
+        .catch((error) => {
           const errorMessages = extractErrorMessagesFromResponse(error);
           showToast({
             description: t('errorDescription', errorMessages.join(', ')),
@@ -239,7 +238,7 @@ const OHRIForm: React.FC<OHRIFormProps> = ({
         handleFormSubmit(values);
         setSubmitting(false);
       }}>
-      {props => {
+      {(props) => {
         setIsFormTouched(props.dirty);
 
         return (
